@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
-export class WeatherMessageComponent extends Component {
+class WeatherMessageComponent extends Component {
     render() {
         const { temp, cityName, loading } = this.props;
-        if(loading) return <Text style = {styles.message}>Loadding...</Text>
+        if(loading) return (
+            <View style={styles.loadingStyle}>
+                <ActivityIndicator/>
+                <Text style = {styles.message}>Loadding...</Text>
+            </View>
+        )
         if(!cityName) return <Text style= {styles.message}>Enter your city name</Text>
         return (
             <Text style = {styles.message}>{cityName} is now {temp} °C</Text>
@@ -26,6 +31,12 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
-        marginBottom: 20
+        // marginBottom: 20
+    },
+    loadingStyle: {
+        flexDirection: 'row',
+        backgroundColor: 'green',
+        marginBottom: 20,
+        padding: 10,
     }
 })
