@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { Input } from '../shared/Input';
 import { Button } from '../shared/Button';
+import * as actionCreators from './actionCreators';
 
 class WeatherFormComponent extends Component {
     constructor(props) {
@@ -12,27 +12,11 @@ class WeatherFormComponent extends Component {
         this.getTempByCityName = this.getTempByCityName.bind(this);
     }
 
-    getTempByCityName(){
-        const { dispatch } = this.props;
-        dispatch({ type: 'START_GOT_WEATHER' })
-        const URL = 'https://api.openweathermap.org/data/2.5/weather?appid=01cc37655736835b0b75f2b395737694&units=metric&q=';
-        const { txtCityName } = this.state;
-        axios.get(URL + txtCityName)
-        .then(response => {
-            dispatch({
-                type: 'GOT_WEATHER',
-                cityName: txtCityName,
-                temp: response.data.main.temp,
-            });
-            this.setState({ txtCityName: '' })
-        })
-        .catch(error =>{
-            dispatch({type: 'GOT_ERROR'});
-            this.setState({txtCityName: ''});
-            alert(error);
-        })
+    getTempByCityName() {
+        this.props.getWeather(this.state.txtCityName);
+        this.setState({ txtCityName: '' });
     }
-
+    
     render() {
         return (
             <View>
@@ -51,4 +35,4 @@ class WeatherFormComponent extends Component {
     };
 };
 
-export const WeatherForm = connect()(WeatherFormComponent);
+export const WeatherForm = connect(null, actionCreators)(WeatherFormComponent);
